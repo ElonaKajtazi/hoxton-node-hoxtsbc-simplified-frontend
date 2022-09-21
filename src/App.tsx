@@ -1,32 +1,28 @@
+import { useState } from "react";
 import "./App.css";
+import { SignedInPage } from "./pages/SignedInPage";
+import { SignedOutPage } from "./pages/SignedOutPage";
 
+export type User = {
+  id: number;
+  email: string;
+  password: string;
+};
 function App() {
+  const [currentUser, setCurrentUser] = useState<null | User>(null);
+  function signIn (user: User) {
+    setCurrentUser(user)
+  }
+  function signOut() {
+    setCurrentUser(null)
+  }
   return (
     <div className="App">
-      <form>
-        <h2>Sign up</h2>
-        <label>
-          Email:
-          <input type="email" name="email" required />
-        </label>
-        <label>
-          Password:
-          <input type="password" name="password" required />
-        </label>
-        <button>SIGN UP</button>
-      </form>
-      <form>
-        <h2>Sign in</h2>
-        <label>
-          Email:
-          <input type="email" name="email" required />
-        </label>
-        <label>
-          Password:
-          <input type="password" name="password" required />
-        </label>
-        <button>SIGN IN</button>
-      </form>
+      {currentUser ? (
+        <SignedInPage currentUser={currentUser} />
+      ) : (
+        <SignedOutPage signIn={signIn}/>
+      )}
     </div>
   );
 }
