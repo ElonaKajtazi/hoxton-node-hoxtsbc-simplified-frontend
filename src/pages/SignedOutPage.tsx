@@ -22,7 +22,13 @@ export function SignedOutPage({ signIn }: Props) {
             }),
           })
             .then((rsp) => rsp.json())
-            .then((user) => signIn(user));
+            .then((data) => {
+              if (data.error) {
+                alert(data.error);
+              } else {
+                signIn(data);
+              }
+            });
         }}
       >
         <h2>Sign up</h2>
@@ -36,7 +42,29 @@ export function SignedOutPage({ signIn }: Props) {
         </label>
         <button>SIGN UP</button>
       </form>
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          fetch("http://localhost:4444/sign-in", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: e.target.email.value,
+              password: e.target.password.value,
+            }),
+          })
+            .then((rsp) => rsp.json())
+            .then((data) => {
+              if (data.error) {
+                alert(data.error);
+              } else {
+                signIn(data);
+              }
+            });
+        }}
+      >
         <h2>Sign in</h2>
         <label>
           Email:
